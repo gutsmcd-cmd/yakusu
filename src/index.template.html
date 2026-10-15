@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f3eee4">
+<title>訳す — ページをその場で英語に / Yakusu page translator</title>
+<meta name="description" content="ブックマークを押すだけで、日本語のページをその場で英語に。インストール不要・無料・ログインなし。">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<script>try{if(localStorage.getItem("m-free-apps-lang")==="en")document.documentElement.lang="en";}catch(e){}</script>
+<style>
+:root{--paper:#f3eee4;--paper-2:#e7efe8;--card:#fffaf3;--ink:#241f1a;--muted:#6e655c;--line:#e3d6c4;--moss:#3e6b4c;--clay:#c46b4a;--gold:#e4b15c;--shadow:0 10px 30px rgba(36,31,26,.06);
+--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Hiragino Mincho ProN","Yu Mincho",serif;--ui:"Avenir Next","Segoe UI","Hiragino Sans","Meiryo","Noto Sans JP",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--ui);font-size:17px;line-height:1.6}
+html[lang="ja"] .t-en{display:none!important}html[lang="en"] .t-ja{display:none!important}
+a{color:var(--moss)}.wrap{width:min(860px,calc(100% - 2rem));margin-inline:auto}
+.site-header{position:sticky;top:0;z-index:5;background:rgba(243,238,228,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:1rem;min-height:60px}.logo{font-family:var(--serif);font-weight:600;text-decoration:none;color:var(--ink)}
+.lang{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.lang-btn{border:0;background:transparent;color:var(--muted);font:inherit;padding:.3rem .75rem;cursor:pointer}.lang-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em}h1{font-size:clamp(2.1rem,5vw,3.2rem);line-height:1.15;margin:0 0 .5rem}
+h2{font-size:1.5rem;margin:0 0 .6rem}.hero{padding:2.2rem 0 1rem}.lead{font-size:1.15rem;margin:0 0 .3rem}.muted{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:1.3rem 1.4rem;margin:1rem 0}
+.bm-row{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;margin:.8rem 0}
+.bm{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.3rem;border-radius:999px;background:var(--moss);color:#fff;text-decoration:none;font-weight:700;font-size:1.1rem;cursor:grab;box-shadow:0 4px 14px rgba(62,107,76,.3)}
+.bm.alt{background:var(--card);color:var(--moss);border:2px solid var(--moss);box-shadow:none;font-size:1rem}
+.bm b{font-family:var(--serif);font-size:1.3rem}.tag{font-size:.8rem;background:var(--paper-2);color:var(--moss);border-radius:999px;padding:.15rem .6rem;font-weight:600}
+ol{padding-left:1.4rem}li{margin:.25rem 0}kbd{font-family:inherit;background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:0 .35rem;font-size:.9em}
+.ui{font-weight:600;color:var(--ink);background:var(--paper-2);border-radius:5px;padding:0 .3rem}
+textarea{width:100%;height:6.5rem;font:12px/1.4 ui-monospace,Consolas,monospace;border:1px solid var(--line);border-radius:10px;padding:.6rem;background:#fff;color:var(--muted);resize:vertical}
+.btn{border:1px solid var(--moss);background:var(--moss);color:#fff;border-radius:999px;padding:.45rem 1.1rem;font:inherit;font-weight:600;cursor:pointer}.btn.ghost{background:transparent;color:var(--moss)}
+.copied{color:var(--moss);font-weight:600;margin-left:.6rem}
+.warn{background:#fbefe9;border-color:#e9c3b2}.warn h2{color:#8a3a22}
+.cols{display:grid;gap:1rem}@media(min-width:760px){.cols{grid-template-columns:1fr 1fr}}
+.demo{border:1px dashed var(--line);border-radius:14px;padding:1rem;background:#fff}
+.demo input{font:inherit;padding:.35rem .6rem;border:1px solid var(--line);border-radius:8px}
+footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem}
+details summary{cursor:pointer;font-weight:600}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="wrap bar">
+  <a class="logo" href="https://gutsmcd-cmd.github.io/free-apps/">M@</a>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" data-set-lang="ja" class="lang-btn">日本語</button>
+    <button type="button" data-set-lang="en" class="lang-btn">English</button>
+  </div>
+</div></header>
+<main class="wrap">
+  <section class="hero">
+    <h1><span class="t-ja">訳す</span><span class="t-en">Yakusu</span> <span class="tag">bookmarklet</span></h1>
+    <p class="lead"><span class="t-ja">ブックマークを押すだけで、日本語のページをその場で英語に。</span><span class="t-en">Click one bookmark and a Japanese page turns into English, right where it sits.</span></p>
+    <p class="muted"><span class="t-ja">インストールも拡張機能もいりません。ボタン・リンク・フォームはそのまま使えます。無料・ログインなし。</span><span class="t-en">No install and no extension. Buttons, links and forms keep working. Free, no login.</span></p>
+  </section>
+
+  <section class="card">
+    <h2><span class="t-ja">1. ブックマークバーにドラッグ</span><span class="t-en">1. Drag it to your bookmarks bar</span></h2>
+    <p><span class="t-ja">下の緑のボタンを、マウスでつかんでブックマークバーに落としてください。バーが見えないときは <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>。</span><span class="t-en">Grab the green button and drop it on your bookmarks bar. If the bar is hidden, press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>.</span></p>
+    <div class="bm-row">
+      <a class="bm" id="bm-inline" href="__INLINE_ATTR__" title="訳す"><b>訳</b> 訳す</a>
+      <span class="muted"><span class="t-ja">← おすすめ（ほとんどのページで動く版）</span><span class="t-en">← Recommended (works on the most pages)</span></span>
+    </div>
+    <details>
+      <summary><span class="t-ja">小さい自動更新版もあります</span><span class="t-en">There is also a small auto-updating version</span></summary>
+      <p><span class="t-ja">こちらは毎回このサイトから最新版を読み込みます。ただし、社内ページの多くは外部スクリプトを禁止しているので、動かないことがあります。そのときは上のおすすめ版を使ってください。</span><span class="t-en">This one loads the newest code from this site each time. Many intranet pages block outside scripts, though, so it may not run there. If so, use the recommended one above.</span></p>
+      <div class="bm-row"><a class="bm alt" id="bm-loader" href="__LOADER_ATTR__" title="訳す（自動更新）"><b>訳</b> 訳す・自動更新</a></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2><span class="t-ja">ドラッグできないときは（手で登録）</span><span class="t-en">If dragging is blocked (add it by hand)</span></h2>
+    <p><span class="t-ja">まず下のコードをコピーします。</span><span class="t-en">First copy the code below.</span></p>
+    <textarea id="code" readonly spellcheck="false">__INLINE_TEXT__</textarea>
+    <p><button class="btn" type="button" id="copy"><span class="t-ja">コードをコピー</span><span class="t-en">Copy the code</span></button><span class="copied" id="copied" hidden><span class="t-ja">コピーしました ✓</span><span class="t-en">Copied ✓</span></span></p>
+    <div class="cols">
+      <div>
+        <h3>Google Chrome</h3>
+        <ol>
+          <li><span class="t-ja"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> でブックマークバーを表示。</span><span class="t-en">Show the bookmarks bar with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>.</span></li>
+          <li><span class="t-ja">バーの空いている所を右クリック →「<span class="ui">ページを追加...</span>」。</span><span class="t-en">Right-click an empty spot on the bar → "<span class="ui">ページを追加...</span>" (Add page).</span></li>
+          <li><span class="t-ja">「<span class="ui">名前</span>」に <b>訳す</b> と入力。</span><span class="t-en">Type <b>訳す</b> in "<span class="ui">名前</span>" (Name).</span></li>
+          <li><span class="t-ja">「<span class="ui">URL</span>」欄を空にして、<kbd>Ctrl</kbd>+<kbd>V</kbd> で貼り付け。</span><span class="t-en">Clear the "<span class="ui">URL</span>" field and paste with <kbd>Ctrl</kbd>+<kbd>V</kbd>.</span></li>
+          <li><span class="t-ja">「<span class="ui">保存</span>」を押す。</span><span class="t-en">Click "<span class="ui">保存</span>" (Save).</span></li>
+        </ol>
+        <p class="muted"><span class="t-ja">別の方法：☆（このタブをブックマーク）で何かのページを登録 → バーのそのブックマークを右クリック →「<span class="ui">編集...</span>」→ URL を貼り替え。</span><span class="t-en">Another way: bookmark any page with ☆, right-click it on the bar → "<span class="ui">編集...</span>" (Edit) → replace the URL.</span></p>
+      </div>
+      <div>
+        <h3>Microsoft Edge</h3>
+        <ol>
+          <li><span class="t-ja"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> でお気に入りバーを表示。</span><span class="t-en">Show the favorites bar with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>.</span></li>
+          <li><span class="t-ja">今のページを ☆（<span class="ui">このページをお気に入りに追加</span>）で、場所「<span class="ui">お気に入りバー</span>」に追加。</span><span class="t-en">Add the current page with ☆ (<span class="ui">このページをお気に入りに追加</span>) to the folder "<span class="ui">お気に入りバー</span>".</span></li>
+          <li><span class="t-ja">バーに出たそのお気に入りを右クリック →「<span class="ui">編集</span>」。</span><span class="t-en">Right-click that favorite on the bar → "<span class="ui">編集</span>" (Edit).</span></li>
+          <li><span class="t-ja">「<span class="ui">名前</span>」を <b>訳す</b> に、「<span class="ui">URL</span>」を空にして <kbd>Ctrl</kbd>+<kbd>V</kbd>。</span><span class="t-en">Set "<span class="ui">名前</span>" (Name) to <b>訳す</b>; clear "<span class="ui">URL</span>" and paste with <kbd>Ctrl</kbd>+<kbd>V</kbd>.</span></li>
+          <li><span class="t-ja">「<span class="ui">保存</span>」を押す。</span><span class="t-en">Click "<span class="ui">保存</span>" (Save).</span></li>
+        </ol>
+        <p class="muted"><span class="t-ja">バーの空いている所を右クリック →「<span class="ui">お気に入りの追加</span>」（版によって「ページを追加」）でも登録できます。</span><span class="t-en">You can also right-click an empty spot on the bar → "<span class="ui">お気に入りの追加</span>" (on some versions "ページを追加").</span></p>
+      </div>
+    </div>
+    <p class="muted"><span class="t-ja">メニューの名前はブラウザの版によって少し違うことがあります。</span><span class="t-en">Menu names can differ slightly between browser versions.</span></p>
+  </section>
+
+  <section class="card">
+    <h2><span class="t-ja">2. 使い方</span><span class="t-en">2. How to use it</span></h2>
+    <ol>
+      <li><span class="t-ja">翻訳したいページを開いて、ブックマークの「<b>訳す</b>」を押す。</span><span class="t-en">Open the page you want, then click the <b>訳す</b> bookmark.</span></li>
+      <li><span class="t-ja">そのサイトで初めてのときだけ、注意が出ます。「<span class="ui">OK・翻訳する</span>」で始まります。</span><span class="t-en">The first time on each site you see a privacy note. Click "<span class="ui">OK・翻訳する</span>" to start.</span></li>
+      <li><span class="t-ja">右下の小さなボタンで <b>EN</b>（英語）と <b>JP</b>（原文）を切り替え。「訳」をつかむと動かせます。<b>×</b> で元に戻して終了。</span><span class="t-en">Use the small box at the bottom right to switch between <b>EN</b> and <b>JP</b> (original). Drag "訳" to move it. <b>×</b> restores the page and closes.</span></li>
+      <li><span class="t-ja">あとから出てきた文字（メニュー・検索結果など）も自動で訳します。</span><span class="t-en">Text that appears later (menus, search results and so on) is translated automatically.</span></li>
+    </ol>
+    <div class="demo" lang="ja" translate="yes">
+      <p class="muted"><span class="t-ja">ここで試せます：登録したブックマークを押してみてください。</span><span class="t-en">Try it here: click your new bookmark.</span></p>
+      <p>本日の会議は午後三時から第二会議室で行います。資料は共有フォルダに保存してください。</p>
+      <p><input placeholder="社員番号を入力してください"> <button type="button" title="検索します">検索</button></p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="t-ja">外部への通信が禁止されたページでは</span><span class="t-en">Pages that block outside connections</span></h2>
+    <p><span class="t-ja">社内ページによっては、設定（CSP）で外への通信が止められています。そのときは「<span class="ui">中継ウィンドウを開く</span>」ボタンが出ます。押すと小さなウィンドウが開き、そこを通して翻訳します。翻訳中は閉じないでください（後ろに回してかまいません）。ポップアップがブロックされたら、アドレスバーの右端のアイコンから許可してください。</span><span class="t-en">Some intranet pages block outside connections with a setting called CSP. You then see an "<span class="ui">Open relay</span>" button. It opens a small window, and translation goes through it. Keep it open while you work (it can sit behind). If the popup is blocked, allow it from the icon at the right end of the address bar.</span></p>
+  </section>
+
+  <section class="card warn">
+    <h2><span class="t-ja">プライバシーについて</span><span class="t-en">Privacy</span></h2>
+    <p><span class="t-ja">「訳す」は、ページに見えている文字を<b>Google 翻訳（外部のサービス）</b>に送って英語にします。社外秘のページ、個人情報・お客様情報が載ったページ、パスワードなどでは<b>使わないでください</b>。会社のルールも確認してください。</span><span class="t-en">Yakusu sends the visible text of the page to <b>Google Translate, an outside service</b>. <b>Don't use it</b> on confidential pages, or pages with personal or customer data. Check your company's rules too.</span></p>
+    <p><span class="t-ja">送るのは文字だけです。ページのアドレス（URL）・ログイン情報・入力欄の中身・パスワード欄は送りません。翻訳結果はそのタブの中だけに一時保存されます。</span><span class="t-en">Only text is sent: not the page address (URL), not your login, not what you type in fields, not passwords. Translations are cached only inside that tab.</span></p>
+  </section>
+
+  <section class="card">
+    <h2><span class="t-ja">できないこと</span><span class="t-en">Limits</span></h2>
+    <ul>
+      <li><span class="t-ja">画像の中の文字、PDF、新しいタブ画面や設定画面（chrome:// / edge://）は訳せません。</span><span class="t-en">It can't translate text inside images, PDFs, or the New Tab and settings pages (chrome:// / edge://).</span></li>
+      <li><span class="t-ja">別サイトから埋め込まれた枠（iframe）の中は訳せません。同じサイトの枠は訳します。</span><span class="t-en">Frames embedded from another site can't be translated; frames from the same site are.</span></li>
+      <li><span class="t-ja">英語は長くなるので、狭いボタンでは文字があふれることがあります。</span><span class="t-en">English is longer, so text may overflow in narrow buttons.</span></li>
+      <li><span class="t-ja">短時間にたくさん訳すと、Google 側で一時的に止められることがあります。少し待てば戻ります。</span><span class="t-en">Translating a lot in a short time can get you rate-limited by Google for a while. It recovers after a wait.</span></li>
+      <li><span class="t-ja">会社の設定でブックマークの追加や「javascript:」が禁止されている場合は使えません。</span><span class="t-en">If your company's browser policy blocks adding bookmarks or "javascript:" links, it can't run.</span></li>
+    </ul>
+  </section>
+</main>
+<footer class="wrap"><span class="t-ja">M@ の無料アプリ ・ 無料・広告なし・ログインなし</span><span class="t-en">M@ free apps · free, no ads, no login</span> · v__VERSION__</footer>
+<script>
+(function(){
+  var html=document.documentElement;
+  function set(l){html.lang=l;try{localStorage.setItem("m-free-apps-lang",l)}catch(e){}
+    document.querySelectorAll("[data-set-lang]").forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-set-lang")===l)});}
+  document.querySelectorAll("[data-set-lang]").forEach(function(b){b.onclick=function(){set(b.getAttribute("data-set-lang"))}});
+  set(html.lang==="en"?"en":"ja");
+  var ta=document.getElementById("code"),ok=document.getElementById("copied");
+  document.getElementById("copy").onclick=function(){
+    function done(){ok.hidden=false;setTimeout(function(){ok.hidden=true},2500)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(ta.value).then(done,function(){ta.select();document.execCommand("copy");done()})}
+    else{ta.select();document.execCommand("copy");done()}
+  };
+  ta.addEventListener("focus",function(){ta.select()});
+})();
+</script>
+</body>
+</html>
