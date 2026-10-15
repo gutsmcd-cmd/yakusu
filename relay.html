@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>訳す 中継 / Yakusu relay</title>
+<style>
+body{margin:0;font-family:"Segoe UI","Hiragino Sans","Meiryo",sans-serif;background:#f3eee4;color:#241f1a;display:grid;place-items:center;min-height:100vh;text-align:center}
+.c{padding:18px 20px;max-width:360px}.b{font-size:28px;color:#3e6b4c;font-weight:700}p{margin:.4em 0;font-size:14px}.m{color:#6e655c;font-size:12px}#n{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="c">
+  <div class="b">訳</div>
+  <p id="s">翻訳の中継をしています。このウィンドウは開いたままにしてください。</p>
+  <p class="m" id="e">Relaying translations. Keep this small window open (you can put it behind).</p>
+  <p class="m">翻訳済み / Done: <span id="n">0</span></p>
+</div>
+<script>
+(function () {
+  var EPS = [
+    'https://translate.googleapis.com/translate_a/t?client=gtx&sl=ja&tl=en&format=text',
+    'https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=ja&tl=en'
+  ];
+  var count = 0, op = window.opener;
+  function gpost(url, arr) {
+    var body = arr.map(function (s) { return 'q=' + encodeURIComponent(s); }).join('&');
+    return fetch(url, { method: 'POST', body: body, credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' } })
+      .then(function (r) { if (!r.ok) { var e = new Error('HTTP ' + r.status); e.status = r.status; throw e; } return r.json(); })
+      .then(function (j) {
+        if (typeof j === 'string') j = [j];
+        if (!Array.isArray(j) || j.length !== arr.length) throw new Error('bad response');
+        return j.map(function (x) { return Array.isArray(x) ? x[0] : x; });
+      });
+  }
+  if (!op) {
+    document.getElementById('s').textContent = 'このページは「訳す」ブックマークから自動で開きます。';
+    document.getElementById('e').textContent = 'This page opens automatically from the Yakusu bookmark.';
+    return;
+  }
+  window.addEventListener('message', function (e) {
+    var m = e.data;
+    if (e.source !== op || !m || m.yakusu !== 'tr' || !Array.isArray(m.q)) return;
+    var q = m.q.slice(0, 200).map(String);
+    gpost(EPS[0], q).catch(function () { return gpost(EPS[1], q); }).then(function (out) {
+      count += out.length; document.getElementById('n').textContent = count;
+      e.source.postMessage({ yakusu: 'res', id: m.id, out: out }, e.origin);
+    }, function (err) {
+      e.source.postMessage({ yakusu: 'res', id: m.id, err: String(err && err.message || err), status: err && err.status }, e.origin);
+    });
+  });
+  op.postMessage({ yakusu: 'ready' }, '*');
+  setInterval(function () { if (op.closed) window.close(); }, 3000);
+})();
+</script>
+</body>
+</html>
